@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,9 +25,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     nameController.text = user?.displayName ?? '';
     emailController.text = user?.email ?? '';
 
-    displayName = user?.displayName?.isNotEmpty == true
-        ? user!.displayName!
-        : 'User';
+    displayName =
+        user?.displayName?.isNotEmpty == true ? user!.displayName! : 'User';
   }
 
   @override
@@ -86,6 +86,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout() async {
+    final googleSignIn = GoogleSignIn();
+
+    try {
+      await GoogleSignIn().signOut();
+    } catch (e) {}
+
     await FirebaseAuth.instance.signOut();
 
     if (!mounted) return;
@@ -132,7 +138,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       suffixIcon: IconButton(
                         onPressed: () {
                           setDialogState(() {
-                            isDeletePasswordHidden = !isDeletePasswordHidden;
+                            isDeletePasswordHidden =
+                                !isDeletePasswordHidden;
                           });
                         },
                         icon: Icon(
@@ -175,39 +182,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     if (enteredPassword.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Please enter your password"),
+                          content:
+                              Text("Please enter your password"),
                         ),
                       );
                       return;
                     }
 
                     try {
-                      final user = FirebaseAuth.instance.currentUser;
+                      final user =
+                          FirebaseAuth.instance.currentUser;
 
                       if (user != null && user.email != null) {
-                        final credential = EmailAuthProvider.credential(
+                        final credential =
+                            EmailAuthProvider.credential(
                           email: user.email!,
                           password: enteredPassword,
                         );
 
-                        await user.reauthenticateWithCredential(credential);
+                        await user
+                            .reauthenticateWithCredential(credential);
                         await user.delete();
 
-                        deletePasswordController.dispose();
-
                         if (!mounted) return;
+
+                        Navigator.pop(dialogContext);
 
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const LoginScreen(),
-                          ),
+                              builder: (_) => const LoginScreen()),
                           (route) => false,
                         );
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Account deleted successfully"),
+                            content: Text(
+                                "Account deleted successfully"),
                           ),
                         );
                       }
@@ -231,7 +242,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       if (!mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("An error occurred")),
+                        const SnackBar(
+                          content: Text("An error occurred"),
+                        ),
                       );
                     }
                   },
@@ -248,6 +261,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
   }
+
+  // باقي الكود unchanged (updateProfile, UI, widgets...)
 
   Future<void> _updateProfile() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -737,3 +752,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
