@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "677945361416-3smtdipjmcpq9qfp195aetit67i5rad2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.safezone_app",
+            "certificate_hash": "f8fc736afe434d405ba4af0c66987f94d026edae"
+          }
+        },
+        {
           "client_id": "677945361416-fg8smt2j6adum7vugoprv384p1e9039l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

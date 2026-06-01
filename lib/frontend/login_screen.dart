@@ -85,14 +85,21 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(content: Text(message)),
       );
     } catch (e) {
-      if (!mounted) return;
+      print("GOOGLE ERROR: $e");
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Google sign-in failed')),
+        SnackBar(content: Text("Error: $e")),
       );
     }
   }
 
+// catch (e) {
+//       if (!mounted) return;
+
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text('Google sign-in failed')),
+//       );
+//     }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
