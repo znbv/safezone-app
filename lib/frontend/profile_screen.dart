@@ -262,7 +262,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // باقي الكود unchanged (updateProfile, UI, widgets...)
 
   Future<void> _updateProfile() async {
     final user = FirebaseAuth.instance.currentUser;
